@@ -20,7 +20,7 @@ int bind_socket_to_interface( int sockfd, const char* if_name ) {
 
     sll.sll_family = AF_PACKET;
     sll.sll_protocol = htons( ETH_P_ALL );
-    sll.sll_ifindex = ifindex;
+    sll.sll_ifindex = if_index;
 
     return bind( sockfd, ( struct sockaddr * )&sll, sizeof( sll ) );
 }
