@@ -4,6 +4,18 @@
 #include <stdint.h>
 #include <stddef.h>
 
+enum bpf_class {
+    BPF_LD = 0x00
+};
+
+enum bpf_size {
+    BPF_H = 0x08
+};
+
+enum bpf_mode {
+    BPF_ABS = 0x20
+};
+
 struct sock_filter {
     uint16_t code;
     uint8_t jt;

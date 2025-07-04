@@ -8,8 +8,8 @@ uint32_t run_bpf( const struct sock_filter* prog, size_t prog_len, const uint8_t
         struct sock_filter ins = prog[ pc ];
 
         switch (ins.code) {
-            case 0x28:  // BPF_LD | BPF_H | BPF_ABS
-                if ( ins.k + 1 >= pkt_len ) return 0;
+            case BPF_LD | BPF_H | BPF_ABS:
+                if ( ins.k > pkt_len - 2 ) return 0;
                 A = ( pkt[ ins.k ] << 8) | pkt[ ins.k + 1 ];
                 break;
 
