@@ -29,12 +29,27 @@ START_TEST( test_ldb_abs )
 }
 END_TEST
 
+START_TEST( test_ldw_abs )
+{
+    struct sock_filter prog[] = {
+        { 0x20, 0, 0, 0 },
+        { 0x06, 0, 0, 0 }
+    };
+
+    uint8_t pkt[] = { 0x01, 0x23, 0x45, 0x67 };
+    uint32_t result = run_bpf( prog, 2, pkt, sizeof( pkt ) );
+
+    ck_assert_int_eq( result, 0x01234567 );
+}
+END_TEST
+
 Suite *filter_suite( void ) {
     Suite *s = suite_create( "Filter" );
     TCase *tc = tcase_create( "RawSocket" );
 
     tcase_add_test( tc, test_ldh_abs );
     tcase_add_test( tc, test_ldb_abs );
+    tcase_add_test( tc, test_ldw_abs );
     suite_add_tcase( s, tc );
 
     return s;

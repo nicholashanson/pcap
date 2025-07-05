@@ -14,6 +14,7 @@ enum bpf_class {
 };
 
 enum bpf_size {
+	BPF_W = 0x00,
     BPF_H = 0x08,
     BPF_B = 0x10
 };
