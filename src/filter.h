@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "parse_filter.h"
+
 #ifndef WIN32
 #include <linux/filter.h>
 #endif

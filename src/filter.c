@@ -62,12 +62,24 @@ struct sock_filter tcp_filter_code[] = {
     { 0x6,  0, 0, 0x0000ffff }, // accept packet
 };
 
-const struct sock_filter* compile_filter( const char* filter_name, size_t* out_len ) {
-    if ( strcmp( filter_name, "ip" ) == 0 ) {
+const struct sock_filter* compile_filter( const char* filter_text, size_t* out_len ) {
+
+    filter_node* root = parse_filter( filter_text );
+    if ( !root ) {
+        if ( out_len ) *out_len = 0;
+        return NULL;
+    }
+
+    if ( root->type != NODE_FILTER ) {
+        if ( out_len ) *out_len = 0;
+        return NULL;
+    }
+
+    if ( strcmp( root->data.filter_text, "ip" ) == 0 ) {
         if ( out_len ) *out_len = sizeof( ip_filter_code ) / sizeof( ip_filter_code[ 0 ] );
         return ip_filter_code;
     }
-    if ( strcmp( filter_name, "tcp" ) == 0 ) {
+    if ( strcmp( root->data.filter_text, "tcp" ) == 0 ) {
         if ( out_len ) *out_len = sizeof( tcp_filter_code ) / sizeof( tcp_filter_code[ 0 ] );
         return tcp_filter_code;
     }
