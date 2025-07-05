@@ -10,7 +10,9 @@
 
 #ifdef WIN32
 enum bpf_class {
-    BPF_LD = 0x00
+    BPF_LD = 0x00,
+    BPF_JMP = 0x05,
+    BPF_RET  = 0x06
 };
 
 enum bpf_size {
@@ -20,7 +22,16 @@ enum bpf_size {
 };
 
 enum bpf_mode {
+	BPF_K   = 0x00,
     BPF_ABS = 0x20
+};
+
+enum bpf_jump {
+	BPF_JEQ 0x10
+};
+
+enum bpf_src {
+    BPF_A = 0x10  
 };
 
 struct sock_filter {

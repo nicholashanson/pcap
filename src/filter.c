@@ -21,7 +21,18 @@ uint32_t run_bpf( const struct sock_filter* prog, size_t prog_len, const uint8_t
                 A = ( pkt[ ins.k ]     << 24 ) | ( pkt[ ins.k + 1 ] << 16 ) | 
                     ( pkt[ ins.k + 2 ] <<  8 ) | ( pkt[ ins.k + 3 ] );
                 break;
-            case 0x06:
+            case BPF_JMP | BPF_JEQ | BPF_K:
+                if ( A == ins.k ) {
+                    if ( pc + ins.jt + 1 >= prog_len ) return 0; 
+                    pc += ins.jt + 1;
+                } else {
+                    if ( pc + ins.jf + 1 >= prog_len ) return 0;  
+                    pc += ins.jf + 1;
+                }
+                continue;
+            case BPF_RET | BPF_K:
+                return ins.k;
+            case BPF_RET | BPF_A:
                 return A;
 
             default:
