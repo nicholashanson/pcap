@@ -45,18 +45,29 @@ uint32_t run_bpf( const struct sock_filter* prog, size_t prog_len, const uint8_t
     return 0;
 }
 
+struct sock_filter ip_filter_code[] = {
+    { 0x28, 0, 0, 0x0000000c }, // load ether-type
+    { 0x15, 0, 1, 0x00000800 }, // check ether-type == ipv4
+    { 0x6,  0, 0, 0x0000ffff }, // accept packet
+    { 0x6,  0, 0, 0x00000000 }, // drop packet
+};
+
 struct sock_filter tcp_filter_code[] = {
     { 0x28, 0, 0, 0x0000000c }, // load ether-type
-    { 0x15, 0, 5, 0x00000800 }, // check ether-type == ipv4
+    { 0x15, 1, 0, 0x00000800 }, // check ether-type == ipv4
     { 0x6,  0, 0, 0x00000000 }, // drop if not
     { 0x30, 0, 0, 0x00000017 }, // load ip protocol
-    { 0x15, 0, 2, 0x00000006 }, // check if tcp
+    { 0x15, 1, 0, 0x00000006 }, // check if tcp
     { 0x6,  0, 0, 0x00000000 }, // drop if not
     { 0x6,  0, 0, 0x0000ffff }, // accept packet
 };
 
 const struct sock_filter* compile_filter( const char* filter_name, size_t* out_len ) {
-    if ( strcmp( filter_name, "tcp") == 0 ) {
+    if ( strcmp( filter_name, "ip" ) == 0 ) {
+        if ( out_len ) *out_len = sizeof( ip_filter_code ) / sizeof( ip_filter_code[ 0 ] );
+        return ip_filter_code;
+    }
+    if ( strcmp( filter_name, "tcp" ) == 0 ) {
         if ( out_len ) *out_len = sizeof( tcp_filter_code ) / sizeof( tcp_filter_code[ 0 ] );
         return tcp_filter_code;
     }

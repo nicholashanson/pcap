@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -std=c99
 LDLIBS = -lcheck -lsubunit -lm
 
 # Source files
-SRCS = tests/test_main.c tests/test_capture.c tests/test_filter.c src/capture.c src/filter.c
+SRCS = tests/test_main.c tests/test_capture.c tests/test_filter.c tests/test_packets.c src/capture.c src/filter.c
 TARGET = test_capture
 
 # Default target

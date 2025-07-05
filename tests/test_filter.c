@@ -1,5 +1,6 @@
 #include <check.h>
 #include "../src/filter.h"
+#include "test_packets.h"
 
 START_TEST( test_ldh_abs )
 {
@@ -96,6 +97,32 @@ START_TEST( test_compile_filter_tcp ) {
 }
 END_TEST
 
+START_TEST( test_compile_and_run_ip_filter )
+{
+    size_t prog_len;
+    const struct sock_filter* prog = compile_filter( "ip", &prog_len );
+
+    ck_assert_ptr_nonnull( prog );
+    ck_assert_uint_gt( prog_len, 0 );
+
+    uint32_t result = run_bpf( prog, prog_len, pkt_ipv4_tcp, pkt_ipv4_tcp_len );
+    ck_assert_int_eq( result, 0x0000ffff ); 
+}
+END_TEST
+
+START_TEST( test_compile_and_run_tcp_filter )
+{
+    size_t prog_len;
+    const struct sock_filter* prog = compile_filter( "tcp", &prog_len );
+
+    ck_assert_ptr_nonnull( prog );
+    ck_assert_uint_gt( prog_len, 0 );
+
+    uint32_t result = run_bpf( prog, prog_len, pkt_ipv4_tcp, pkt_ipv4_tcp_len );
+    ck_assert_int_eq( result, 0x0000ffff ); 
+}
+END_TEST
+
 Suite *filter_suite( void ) {
     Suite *s = suite_create( "Filter" );
     TCase *tc = tcase_create( "RawSocket" );
@@ -106,6 +133,8 @@ Suite *filter_suite( void ) {
     tcase_add_test( tc, test_jump_eq_k_true );
     tcase_add_test( tc, test_jump_eq_k_false );
     tcase_add_test( tc, test_compile_filter_tcp );
+    tcase_add_test( tc, test_compile_and_run_ip_filter );
+    tcase_add_test( tc, test_compile_and_run_tcp_filter );
     suite_add_tcase( s, tc );
 
     return s;
