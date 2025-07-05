@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 #ifndef WIN32
 #include <linux/filter.h>
@@ -42,6 +43,10 @@ struct sock_filter {
 };
 #endif
 
+extern struct sock_filter tcp_filter_code[];
+
 uint32_t run_bpf( const struct sock_filter* prog, size_t prog_len, const uint8_t* pkt, size_t pkt_len );
+
+const struct sock_filter* compile_filter( const char* filter_name, size_t* out_len );
 
 #endif
