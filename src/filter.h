@@ -38,10 +38,10 @@ enum bpf_src {
 };
 
 struct sock_filter {
-    uint16_t code;
-    uint8_t jt;
-    uint8_t jf;
-    uint32_t k;
+	uint16_t code;
+	uint8_t jt;
+	uint8_t jf;
+	uint32_t k;
 };
 #endif
 
