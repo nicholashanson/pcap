@@ -7,12 +7,15 @@ uint32_t run_bpf( const struct sock_filter* prog, size_t prog_len, const uint8_t
     while ( pc < prog_len ) {
         struct sock_filter ins = prog[ pc ];
 
-        switch (ins.code) {
+        switch ( ins.code ) {
             case BPF_LD | BPF_H | BPF_ABS:
                 if ( ins.k > pkt_len - 2 ) return 0;
                 A = ( pkt[ ins.k ] << 8) | pkt[ ins.k + 1 ];
                 break;
-
+            case BPF_LD | BPF_B | BPF_ABS:
+                if ( ins.k >= pkt_len ) return 0;
+                A = pkt[ ins.k ];
+                break;
             case 0x06:
                 return A;
 
