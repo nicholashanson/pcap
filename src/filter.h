@@ -13,35 +13,35 @@
 
 #ifdef WIN32
 enum bpf_class {
-	BPF_LD = 0x00,
-	BPF_JMP = 0x05,
-	BPF_RET  = 0x06
+    BPF_LD = 0x00,
+    BPF_JMP = 0x05,
+    BPF_RET  = 0x06
 };
 
 enum bpf_size {
-	BPF_W = 0x00,
-	BPF_H = 0x08,
-	BPF_B = 0x10
+    BPF_W = 0x00,
+    BPF_H = 0x08,
+    BPF_B = 0x10
 };
 
 enum bpf_mode {
-	BPF_K   = 0x00,
-	BPF_ABS = 0x20
+    BPF_K   = 0x00,
+    BPF_ABS = 0x20
 };
 
 enum bpf_jump {
-	BPF_JEQ 0x10
+    BPF_JEQ 0x10
 };
 
 enum bpf_src {
-	BPF_A = 0x10  
+    BPF_A = 0x10  
 };
 
 struct sock_filter {
-	uint16_t code;
-	uint8_t jt;
-	uint8_t jf;
-	uint32_t k;
+    uint16_t code;
+    uint8_t jt;
+    uint8_t jf;
+    uint32_t k;
 };
 #endif
 

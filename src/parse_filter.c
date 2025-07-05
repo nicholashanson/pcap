@@ -9,11 +9,11 @@ static filter_node* create_filter_node( const char* filter_text ) {
 }
 
 filter_node* parse_filter( const char* filter ) {
-	filter_node* node = malloc( sizeof( filter_node ) );
+    filter_node* node = malloc( sizeof( filter_node ) );
     if ( !node ) return NULL;
 
     if ( strstr( filter, " and " ) ) {
-    	const char* and_ptr = strstr( filter, " and " );
+        const char* and_ptr = strstr( filter, " and " );
         size_t lhs_len = and_ptr - filter;
         size_t rhs_len = strlen( filter ) - lhs_len - 5;
 
