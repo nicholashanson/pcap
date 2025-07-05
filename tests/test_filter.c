@@ -69,6 +69,23 @@ START_TEST( test_jump_eq_k_true )
 }
 END_TEST
 
+START_TEST( test_jump_eq_k_false )
+{
+    struct sock_filter prog[] = {
+        { 0x30, 0, 0, 0x00000017 },    
+        { 0x15, 1, 0, 0x00000006 },    
+        { 0x6,  0, 0, 0x00000000 },   
+        { 0x6,  0, 0, 0x0000ffff },    
+    };
+
+    uint8_t pkt[ 64 ] = { 0 };
+    pkt[ 23 ] = 0x05;
+
+    uint32_t result = run_bpf( prog, 4, pkt, sizeof( pkt ) );
+    ck_assert_int_eq( result, 0 );
+}
+END_TEST
+
 Suite *filter_suite( void ) {
     Suite *s = suite_create( "Filter" );
     TCase *tc = tcase_create( "RawSocket" );
@@ -77,6 +94,7 @@ Suite *filter_suite( void ) {
     tcase_add_test( tc, test_ldb_abs );
     tcase_add_test( tc, test_ldw_abs );
     tcase_add_test( tc, test_jump_eq_k_true );
+    tcase_add_test( tc, test_jump_eq_k_false );
     suite_add_tcase( s, tc );
 
     return s;
